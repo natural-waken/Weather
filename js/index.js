@@ -72,14 +72,14 @@ function main() {
         'GET',
         'https://geoapi.qweather.com/v2/city/lookup',
         obj
-    ).then(res1 => {
-        res1 = JSON.parse(res1)
+    ).then(id => {
+        id = JSON.parse(id)
         console.log('success1');
         // id id id
-        cityid = res1.location[0].id;
+        cityid = id.location[0].id;
         console.log(cityid);
-        nowcity.innerHTML = res1.location[0].name;
-        cityname = res1.location[0].name  // 后面要用
+        nowcity.innerHTML = id.location[0].name;
+        cityname = id.location[0].name  // 后面要用
 
         // 发送第二次请求
         obj.location = cityid
@@ -88,17 +88,16 @@ function main() {
             'https://devapi.qweather.com/v7/weather/now?',
             obj)
 
-    }).then(res2 => {
+    }).then(weatherdata => {
         console.log('success2');
-        // console.log(res2);
 
-        res2 = JSON.parse(res2)
-        console.log(res2);
-        // weatherdata = res2.now
+        weatherdata = JSON.parse(weatherdata)
+        console.log(weatherdata);
+        // weatherdata = weatherdata.now
         // console.log(weatherdata);
 
         // 渲染页面
-        render1(res2.now)
+        render1(weatherdata.now)
 
         // 发送第三次请求
         return ajax(
@@ -106,13 +105,13 @@ function main() {
             'https://devapi.qweather.com/v7/weather/24h?',
             obj)
 
-    }).then(res3 => {
+    }).then(hour => {
         console.log('success3');
 
-        res3 = JSON.parse(res3)
+        hour = JSON.parse(hour)
 
         // 数据
-        hourdata = res3.hourly;
+        hourdata = hour.hourly;
 
         // 渲染页面
         render2(hourdata)
@@ -121,23 +120,23 @@ function main() {
         return ajax('GET', 'https://devapi.qweather.com/v7/weather/7d?', obj)
             
 
-    }).then(res4 => {
-        res4 = JSON.parse(res4)
-        res4 = res4.daily
+    }).then(sevendata => {
+        sevendata = JSON.parse(sevendata)
+        sevendata = sevendata.daily
 
         console.log('success4');
 
         // 渲染页面
-        render3(res4)
+        render3(sevendata)
 
         // 发送第五次请求
         let obj1 = { ...obj };  // 对象复制
         obj1.type = ['1,2,3,6,16']  // type 参数
         return ajax('GET', 'https://devapi.qweather.com/v7/indices/1d?', obj1)
-    }).then(res5 => {
-        res5 = JSON.parse(res5)
+    }).then(info => {
+        info = JSON.parse(info)
 
-        let data = res5.daily  // 数组
+        let data = info.daily  // 数组
 
         // 渲染页面
         render4(data)
