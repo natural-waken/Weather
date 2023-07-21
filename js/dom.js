@@ -24,7 +24,11 @@ let currentime = document.querySelector(".currentime")  // 时间
 let locate = document.querySelector(".locate")  // 定位
 let nowtime = document.querySelector(".nowtime")  // 时间
 
-function render1(data) {
+// 时间星期
+let time = nowTime()
+nowtime.innerHTML = `<i>中国</i> ${time.year}-${time.month}-${time.date}   <i>${time.week}</i>`;
+
+function rendertoday(data) {
     console.log(data.temp);
         temp.innerHTML = `${data.temp}°`  // 温度
         tip.innerHTML = `今天天气是${data.text}, 温度是${data.temp}°`
@@ -40,7 +44,7 @@ function render1(data) {
         bigicon.className = `bigicon qi-${data.icon}`
 }
 
-function render2(data) {
+function renderhour(data) {
     // 渲染页面
     const templine = document.querySelectorAll(".moveline .templine1")
 
@@ -76,7 +80,7 @@ function render2(data) {
     }
 }
 
-function render3(data) {
+function renderrecent(data) {
     // 渲染页面
     const content = document.querySelectorAll(".seven .everyday")
 
@@ -114,7 +118,7 @@ function render3(data) {
     temp3.innerHTML = `<i class="qi-${data[2].iconDay}"></i> ${data[2].tempMax}° ${cityname}`
 }
 
-function render4(data) {
+function renderinfo(data) {
     let indices = document.querySelectorAll(".indices1")  // 5个
     // console.log(indices[0].childNodes);  // 1 3
     for (let i = 0; i < indices.length; i++)

@@ -5,41 +5,10 @@ let obj = {
 }
 
 
-// 获取当前时间
-function nowTime() {
-    var current = new Date();  // 实例化Date对象
-    var nowYear = current.getFullYear();
-    var nowMonth = current.getMonth() + 1;  // 默认显示的是 0-11 月，比我们正常的月份少一个月，所以要 +1
-    var nowdates = current.getDate(); // 获取日期
-    var arr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    var day = current.getDay();
-    // getDay（）返回 1 2 数字  获取星期几 先写好数组存放 通过数组的索引来获取星期几
-    // 补零
-
-    var nowMonth = nowMonth < 10 ? '0' + nowMonth : nowMonth;
-    var nowdates = nowdates < 10 ? '0' + nowdates : nowdates;
-
-
-    // 时间
-    let h = current.getHours();
-    h = h < 10 ? '0' + h : h;
-    let m = current.getMinutes();
-    m = m < 10 ? '0' + m : m;
-    let s = current.getSeconds();
-    s = s < 10 ? '0' + s : s;
-
-    // 渲染在页面上
-    nowtime.innerHTML = `<i>中国</i> ${nowYear}-${nowMonth}-${nowdates}   <i>${arr[day]}</i>`;
-
-    return `${nowYear}-${nowMonth}-${nowdates}  ${h}:${m}:${s}`;
-
-}
-nowTime();
-
-
 // 实时更新时间
 setInterval(function () {
-    currentime.innerHTML = nowTime()
+    let time = nowTime()
+    currentime.innerHTML = `${time.year}-${time.month}-${time.date}  ${time.hour}:${time.minutes}:${time.second}`;
 })
 
 // 定位
@@ -94,10 +63,8 @@ function main() {
         weatherdata = JSON.parse(weatherdata)
         console.log(weatherdata);
         // weatherdata = weatherdata.now
-        // console.log(weatherdata);
-
         // 渲染页面
-        render1(weatherdata.now)
+        rendertoday(weatherdata.now)
 
         // 发送第三次请求
         return ajax(
@@ -114,11 +81,11 @@ function main() {
         hourdata = hour.hourly;
 
         // 渲染页面
-        render2(hourdata)
+        renderhour(hourdata)
 
         // 发送第四次请求
         return ajax('GET', 'https://devapi.qweather.com/v7/weather/7d?', obj)
-            
+
 
     }).then(sevendata => {
         sevendata = JSON.parse(sevendata)
@@ -127,10 +94,10 @@ function main() {
         console.log('success4');
 
         // 渲染页面
-        render3(sevendata)
+        renderrecent(sevendata)
 
         // 发送第五次请求
-        let obj1 = { ...obj };  // 对象复制
+        let obj1 = { ...obj };  // 对象复制 扩展运算符不会改变原对象
         obj1.type = ['1,2,3,6,16']  // type 参数
         return ajax('GET', 'https://devapi.qweather.com/v7/indices/1d?', obj1)
     }).then(info => {
@@ -139,10 +106,9 @@ function main() {
         let data = info.daily  // 数组
 
         // 渲染页面
-        render4(data)
+        renderinfo(data)
 
-    })
-        .catch(error => {
+    }).catch(error => {
         console.log('error', error);
     })
 
